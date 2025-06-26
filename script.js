@@ -30,7 +30,7 @@ function contarBombas(quadrado)
 }
 
 /* Atrelar aos quadrados através do atributo
-"onclick". Retorna */
+"onclick". Retorna "fim()" ou "vitoria()". */
 function clique()
 {
 	return
