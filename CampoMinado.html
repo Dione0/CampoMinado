@@ -1,16 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Campo Minado</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-</head>
-<body>
-    <div class= title>
-<H1>Campo Minado</H1>
-    </div>
-
-    
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Campo Minado</title>
+		<link rel="stylesheet" href="style.css">
+		<script src="script.js"></script>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<tr>
+					<th>
+						Campo Minado
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<table id="campo">
+							<tbody>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<button onclick="iniciar(dificuldade.value, x.value, y.value)">Iniciar</button>
+									</td>
+									<td>
+										<select id="dificuldade">
+											<option value="facil">Fácil</option>
+											<option value="medio" selected="selected">Médio</option>
+											<option value="dificil">Difícil</option>
+										</select>
+									</td>
+									<td>
+										<input id="x" type="text" placeholder="4">
+									</td>
+									<td>
+										X
+									</td>
+									<td>
+										<input id="y" type="text" placeholder="4">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
 </html>

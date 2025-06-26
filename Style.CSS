@@ -1,37 +1,26 @@
-.title{
-    
-    font-size: 25px;
-    color: rgb(23, 58, 39);
-    font-family: sans-serif;
-    padding: 20px;
-    text-align: center;
-    background-color: #9ACD32;
-    Margin: 20px auto;
-    width: 400px;
-    border: 2px solid;
+* {
+	margin: 0;
+	font-family: helvetica
 }
 
-.game-table{
-    border-collapse: collapse;
-    border: 2px solid #0c0c0c;
-      
+body > table {
+	margin: auto
 }
 
-#game-table tr{
-   
+input {
+	width: 40px
 }
 
-#game-table td{
-    width: 30px;
-    height: 30px;
-    border: 1px solid #999;
-    background-color: white;
-    text-align: center;
-    vertical-align: center;
-    font-size: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    user-select: none;
+#campo {
+	margin: auto
+}
 
+#campo, #campo td {
+	border: 1px solid black
+}
 
+#campo td {
+	text-align: center;
+	width: 50px;
+	height: 50px;
 }
