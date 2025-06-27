@@ -1,27 +1,42 @@
-/* Pega pelo ID o campo, pega os "td"s dentro
-dele e transforma em uma matriz que é
-retornada. */
-function buscarCampo()
+function buscarCampo(quadrados, linhas, colunas)
 {
+	let campo = []
+
+	for (let i = 0; i < linhas; i++)
+		campo[i] = [];
+
+	let k = 0
+
+	for (let i = 0; i < linhas; i++)
+		for (let j = 0; j < colunas; j++) {
+			campo[i][j] = quadrados[k]
+			k++
+		}
+
 	return campo
 }
 
-/* Recebe uma matriz "campo" e a dificuldade
-desejada:
-- Fácil: 20% bombas;
-- Médio: 50% bombas;
-- Difícil: 80% bombas. */
-function espalharBombas(campo, dificuldade)
+function espalharBombas(quadrados, dificuldade)
 {
+	let aleatorio
+
+	let bombas = Math.round(quadrados.length * 0.8)
+
+	while (bombas > 0) {
+		aleatorio = Math.floor(Math.random() * quadrados.length)
+		quadrados[aleatorio].innerText = "💣"
+		bombas--
+	}
+
 	return
 }
 
 /* Verifica os quadrados próximos com base
 no seguinte esquema:
 X X X	(-1, +1)	(0, +1)		(+1, +1)
-X 8 X	(-1, 0)		(x, y)		(+1, 0)
+X 8 X	(-1, 0)		(i, j)		(+1, 0)
 X X X	(-1, -1)	(0, -1) 	(+1, -1)
-Se (x + i, y + j) igual à bomba, aumentar
+Se (i + x, j + y) igual à bomba, aumentar
 contador. No fim, retornar o contador de
 bombas. */
 function contarBombas(quadrado)
@@ -45,25 +60,17 @@ function bandeira()
 
 }
 
-/* "iniciar" atribuído ao respectivo botão que passa
-os valores de dificuldade, largura e altura no momento
-que é clicado. */
-function iniciar(dificuldade, largura, altura)
+function iniciar(dificuldade, linhas, colunas)
 {
-//	campo = buscarCampo()
+	const quadrados = document.getElementById("campo").getElementsByTagName("td")
 
-//	espalharBombas(campo, dificuldade)
+	const campo = buscarCampo(quadrados, linhas, colunas)
 
-//	for (let i = 0; i < largura; i++)
-//		for (let j = 0; j < altura; j++)
+	espalharBombas(quadrados, dificuldade)
+
+//	for (let i = 0; i < linhas; i++)
+//		for (let j = 0; j < colunas; j++)
 //			campo[i][j].innerText = contarBombas(campo[i][j])
-//
-//
-//
 
-	quadrados = document.getElementById("campo").getElementsByTagName("td")
-
-	quadrados[0].innerText = "💣"
-
-	return console.log(quadrados)
+	return console.log(campo)
 }
