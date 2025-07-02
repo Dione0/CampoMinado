@@ -1,27 +1,45 @@
-function buscarCampo(quadrados, linhas, colunas)
+function criar(linhas, colunas)
 {
+	const tabela = document.getElementById("campo").getElementsByTagName("tbody")[0]
+
+	// declaração da matriz:
 	let campo = []
 
 	for (let i = 0; i < linhas; i++)
 		campo[i] = [];
+	// ---------------------
 
 	let k = 0
 
-	for (let i = 0; i < linhas; i++)
+	for (let i = 0; i < linhas; i++) {
+		const linha = document.createElement("tr")
 		for (let j = 0; j < colunas; j++) {
-			campo[i][j] = quadrados[k]
-			k++
+			campo[i][j] = document.createElement("td")
+			campo[i][j].className = "fechado"
+			campo[i][j].setAttribute("onmousedown", "this.className='aberto'")
+			campo[i][j].setAttribute("onmouseup", "this.className='fechado'")
+			campo[i][j].setAttribute("onclick", "verificar(this)")
+			campo[i][j].setAttribute("oncontextmenu", "bandeira(this); return false")
+			linha.appendChild(campo[i][j])
 		}
+		tabela.appendChild(linha)
+	}
 
 	return campo
 }
 
-function espalharBombas(quadrados, dificuldade)
+function espalhar(bombas, dificuldade)
 {
-	let aleatorio
-	let bombas
+	let linha
+	let coluna
+	let porcentagem
 
-	bombas = Math.round(quadrados.length * 0.8)
+	switch (dificuldade) {
+		case 'Médio':
+			porcentagem = 0.8
+	}
+
+	bombas = Math.round(quadrados.length * porcentagem)
 
 	while (bombas > 0) {
 		aleatorio = Math.floor(Math.random() * quadrados.length)
@@ -35,13 +53,11 @@ X X X	(-1, -1)	(-1, 0)		(-1, +1)
 X 8 X	( 0, -1)	( i, j)		( 0, +1)
 X X X	(+1, -1)	(+1, 0) 	(+1, +1)
 */
-function contarBombas(campo, linhas, colunas)
+function verificar(celula)
 {
-	let contagem = 0
-
 	for (let i = 0; i < linhas; i++) {
 		for (let j = 0; j < colunas; j++) {
-			if (campo[i][j].innerText == "") {
+			if (celula) {
 				// superior esquerdo
 				if (i - 1 >= 0 && j - 1 >= 0)
 					if (campo[i - 1][j - 1].innerText == "💣")
@@ -93,7 +109,7 @@ function contarBombas(campo, linhas, colunas)
 
 /* Atrelar aos quadrados através do atributo
 "onclick". Retorna "fim()" ou "vitoria()". */
-function clique()
+function verificar(celula)
 {
 	return
 }
@@ -102,22 +118,24 @@ function clique()
 "oncontextmenu". Colocar/remover bandeira;
 adicionar/remover "onclick" e alterar cursor para
 "pointer"/"default". */
-function bandeira()
+function bandeira(celula)
 {
 
 }
 
 function iniciar(dificuldade, linhas, colunas)
 {
-	const quadrados = document.getElementById("campo").getElementsByTagName("td")
-	const campo = buscarCampo(quadrados, linhas, colunas)
 
-	espalharBombas(quadrados, dificuldade)
-	contarBombas(campo, linhas, colunas)
+}
 
-//	for (let i = 0; i < linhas; i++)
-//		for (let j = 0; j < colunas; j++)
-//			campo[i][j].innerText = contarBombas(campo[i][j])
+onload = () => {
+	campo = criar(
+		document.getElementById("linhas").value,
+		document.getElementById("colunas").value
+	)
 
-	return console.log(campo)
+	bombas = espalhar(
+		bombas,
+		document.getElementById("dificuldade").value
+	)
 }
