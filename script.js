@@ -19,29 +19,76 @@ function buscarCampo(quadrados, linhas, colunas)
 function espalharBombas(quadrados, dificuldade)
 {
 	let aleatorio
+	let bombas
 
-	let bombas = Math.round(quadrados.length * 0.8)
+	bombas = Math.round(quadrados.length * 0.8)
 
 	while (bombas > 0) {
 		aleatorio = Math.floor(Math.random() * quadrados.length)
 		quadrados[aleatorio].innerText = "💣"
 		bombas--
 	}
-
-	return
 }
 
-/* Verifica os quadrados próximos com base
-no seguinte esquema:
-X X X	(-1, +1)	(0, +1)		(+1, +1)
-X 8 X	(-1, 0)		(i, j)		(+1, 0)
-X X X	(-1, -1)	(0, -1) 	(+1, -1)
-Se (i + x, j + y) igual à bomba, aumentar
-contador. No fim, retornar o contador de
-bombas. */
-function contarBombas(quadrado)
+/*
+X X X	(-1, -1)	(-1, 0)		(-1, +1)
+X 8 X	( 0, -1)	( i, j)		( 0, +1)
+X X X	(+1, -1)	(+1, 0) 	(+1, +1)
+*/
+function contarBombas(campo, linhas, colunas)
 {
-	return
+	let contagem = 0
+
+	for (let i = 0; i < linhas; i++) {
+		for (let j = 0; j < colunas; j++) {
+			if (campo[i][j].innerText == "") {
+				// superior esquerdo
+				if (i - 1 >= 0 && j - 1 >= 0)
+					if (campo[i - 1][j - 1].innerText == "💣")
+						contagem++
+
+				// superior
+				if (i - 1 >= 0)
+					if (campo[i - 1][j].innerText == "💣")
+						contagem++
+
+				// superior direito
+				if (i - 1 >= 0 && j + 1 < colunas)
+					if (campo[i - 1][j + 1].innerText == "💣")
+						contagem++
+
+				// esquerda
+				if (j - 1 >= 0)
+					if (campo[i][j - 1].innerText == "💣")
+						contagem++
+
+				// direita
+				if (j + 1 < colunas)
+					if (campo[i][j + 1].innerText == "💣")
+						contagem++
+
+				// inferior esquerdo
+				if (i + 1 < linhas && j - 1 >= 0)
+					if (campo[i + 1][j - 1].innerText == "💣")
+						contagem++
+
+				// inferior
+				if (i + 1 < linhas)
+					if (campo[i + 1][j].innerText == "💣")
+						contagem++
+
+				// inferior direito
+				if (i + 1 < linhas && j + 1 < colunas)
+					if (campo[i + 1][j + 1].innerText == "💣")
+						contagem++
+
+				if (contagem > 0)
+					campo[i][j].innerText = contagem
+
+				contagem = 0
+			}
+		}
+	}
 }
 
 /* Atrelar aos quadrados através do atributo
@@ -63,10 +110,10 @@ function bandeira()
 function iniciar(dificuldade, linhas, colunas)
 {
 	const quadrados = document.getElementById("campo").getElementsByTagName("td")
-
 	const campo = buscarCampo(quadrados, linhas, colunas)
 
 	espalharBombas(quadrados, dificuldade)
+	contarBombas(campo, linhas, colunas)
 
 //	for (let i = 0; i < linhas; i++)
 //		for (let j = 0; j < colunas; j++)
