@@ -1,9 +1,39 @@
 var linhas
 var colunas
 var dificuldade
+
 var campo
 var bombas
 var numeros
+
+var livres
+var vitoria = 0
+var mensagem
+
+function definir(celula)
+{
+	celula.setAttribute("onmousedown", "this.className='aberto'")
+	celula.setAttribute("onmouseup", "this.className='fechado'")
+	celula.setAttribute("onclick", "verificar(this)")
+	celula.setAttribute("oncontextmenu", "bandeira(this); return false")
+}
+
+function redefinir(celula)
+{
+	celula.removeAttribute("onmousedown")
+	celula.removeAttribute("onmouseup")
+	celula.removeAttribute("onclick")
+	celula.removeAttribute("oncontextmenu")
+}
+
+function abrir(celula, linha, coluna)
+{
+	if (celula.className == "fechado")
+		livres--
+	celula.className = "aberto"
+	celula.innerText = numeros[linha][coluna]
+	redefinir(celula)
+}
 
 function criar(linhas, colunas)
 {
@@ -24,10 +54,7 @@ function criar(linhas, colunas)
 			campo[i][j] = document.createElement("td")
 			campo[i][j].id = `${i}_${j}`
 			campo[i][j].className = "fechado"
-			campo[i][j].setAttribute("onmousedown", "this.className='aberto'")
-			campo[i][j].setAttribute("onmouseup", "this.className='fechado'")
-			campo[i][j].setAttribute("onclick", "verificar(this)")
-			campo[i][j].setAttribute("oncontextmenu", "bandeira(this); return false")
+			definir(campo[i][j])
 			linha.appendChild(campo[i][j])
 		}
 		tabela.appendChild(linha)
@@ -45,7 +72,6 @@ function espalhar(linhas, colunas, dificuldade)
 		bombas[i] = []
 	// ---------------------
 
-
 	let linha
 	let coluna
 	let porcentagem
@@ -62,6 +88,8 @@ function espalhar(linhas, colunas, dificuldade)
 	}
 
 	quantas = Math.round(linhas * colunas * porcentagem)
+
+	livres = linhas * colunas - quantas
 
 	while (quantas > 0) {
 		do {
@@ -147,20 +175,6 @@ function contagem(campo, bombas, linhas, colunas)
 	return numeros
 }
 
-function redefinir(celula)
-{
-	celula.removeAttribute("onmousedown")
-	celula.removeAttribute("onmouseup")
-	celula.removeAttribute("onclick")
-	celula.removeAttribute("oncontextmenu")
-}
-
-function abrir(celula, linha, coluna) {
-	celula.className = "aberto"
-	celula.innerText = numeros[linha][coluna]
-	redefinir(celula)
-}
-
 function expandir(celula, linha, coluna)
 {
 	const sup = linha - 1
@@ -172,59 +186,99 @@ function expandir(celula, linha, coluna)
 
 	// superior esquerdo
 	if (sup >= 0 && esq >= 0)
-		if (numeros[sup][esq])
-			abrir(campo[sup][esq], sup, esq)
-		else if (campo[sup][esq].className != "aberto")
-			expandir(campo[sup][esq], sup, esq)
+		if (campo[sup][esq].innerText != "🚩")
+			if (numeros[sup][esq])
+				abrir(campo[sup][esq], sup, esq)
+			else if (campo[sup][esq].className != "aberto")
+				expandir(campo[sup][esq], sup, esq)
 
 	// superior
 	if (sup >= 0)
-		if (numeros[sup][coluna])
-			abrir(campo[sup][coluna], sup, coluna)
-		else if (campo[sup][coluna].className != "aberto")
-			expandir(campo[sup][coluna], sup, coluna)
+		if (campo[sup][coluna].innerText != "🚩")
+			if (numeros[sup][coluna])
+				abrir(campo[sup][coluna], sup, coluna)
+			else if (campo[sup][coluna].className != "aberto")
+				expandir(campo[sup][coluna], sup, coluna)
 
 	// superior direito
 	if (sup >= 0 && drt < colunas)
-		if (numeros[sup][drt])
-			abrir(campo[sup][drt], sup, drt)
-		else if (campo[sup][drt].className != "aberto")
-			expandir(campo[sup][drt], sup, drt)
+		if (campo[sup][drt].innerText != "🚩")
+			if (numeros[sup][drt])
+				abrir(campo[sup][drt], sup, drt)
+			else if (campo[sup][drt].className != "aberto")
+				expandir(campo[sup][drt], sup, drt)
 
 	// esquerda
 	if (esq >= 0)
-		if (numeros[linha][esq])
-			abrir(campo[linha][esq], linha, esq)
-		else if (campo[linha][esq].className != "aberto")
-			expandir(campo[linha][esq], linha, esq)
+		if (campo[linha][esq].innerText != "🚩")
+			if (numeros[linha][esq])
+				abrir(campo[linha][esq], linha, esq)
+			else if (campo[linha][esq].className != "aberto")
+				expandir(campo[linha][esq], linha, esq)
 
 	// direita
 	if (drt < colunas)
-		if (numeros[linha][drt])
-			abrir(campo[linha][drt], linha, drt)
-		else if (campo[linha][drt].className != "aberto")
-			expandir(campo[linha][drt], linha, drt)
+		if (campo[linha][drt].innerText != "🚩")
+			if (numeros[linha][drt])
+				abrir(campo[linha][drt], linha, drt)
+			else if (campo[linha][drt].className != "aberto")
+				expandir(campo[linha][drt], linha, drt)
 
 	// inferior esquerdo
 	if (inf < linhas && esq >= 0)
-		if (numeros[inf][esq])
-			abrir(campo[inf][esq], inf, esq)
-		else if (campo[inf][esq].className != "aberto")
-			expandir(campo[inf][esq], inf, esq)
+		if (campo[inf][esq].innerText != "🚩")
+			if (numeros[inf][esq])
+				abrir(campo[inf][esq], inf, esq)
+			else if (campo[inf][esq].className != "aberto")
+				expandir(campo[inf][esq], inf, esq)
 
 	// inferior
 	if (inf < linhas)
-		if (numeros[inf][coluna])
-			abrir(campo[inf][coluna], inf, coluna)
-		else if (campo[inf][coluna].className != "aberto")
-			expandir(campo[inf][coluna], inf, coluna)
+		if (campo[inf][coluna].innerText != "🚩")
+			if (numeros[inf][coluna])
+				abrir(campo[inf][coluna], inf, coluna)
+			else if (campo[inf][coluna].className != "aberto")
+				expandir(campo[inf][coluna], inf, coluna)
 
 	// inferior direito
 	if (inf < linhas && drt < colunas)
-		if (numeros[inf][drt])
-			abrir(campo[inf][drt], inf, drt)
-		else if (campo[inf][drt].className != "aberto")
-			expandir(campo[inf][drt], inf, drt)
+		if (campo[inf][drt].innerText != "🚩")
+			if (numeros[inf][drt])
+				abrir(campo[inf][drt], inf, drt)
+			else if (campo[inf][drt].className != "aberto")
+				expandir(campo[inf][drt], inf, drt)
+}
+
+function fim()
+{
+	let c
+	let ct
+
+	for (let i = 0; i < linhas; i++)
+		for (let j = 0; j < colunas; j++) {
+
+			c  = campo[i][j]
+			ct = c.innerText
+
+			if (bombas[i][j]) {
+				if (ct == "🚩") {
+					c.innerText = "✅"
+				} else {
+					c.innerText = "💣"
+				}
+			} else if (ct == "🚩") {
+				c.innerText = "❌";
+			} else {
+				abrir(c, i, j)
+			}
+
+			if (vitoria) {
+				c.className = "vitoria"
+			}
+
+			c.style.cursor = "default"
+			redefinir(c)
+		}
 }
 
 function verificar(celula)
@@ -236,40 +290,45 @@ function verificar(celula)
 	const linha = Number(pos[0])
 	const coluna = Number(pos[1])
 
-	for (let i = 0; i < linhas; i++) {
-		for (let j = 0; j < colunas; j++) {
-			if (bombas[linha][coluna]) {
-				for (let i = 0; i < linhas; i++)
-					for (let j = 0; j < colunas; j++) {
-						if (bombas[i][j]) {
-							campo[i][j].innerText = "💣"
-							campo[i][j].style.cursor = "default"
-						} else
-							abrir(campo[i][j], i, j)
-						redefinir(campo[i][j])
-					}
-				celula.innerText = "💥"
-			} else if (!numeros[linha][coluna]) {
-				expandir(celula, linha, coluna)
-			} else {
-				abrir(celula, linha, coluna)
-			}
-		}
+	if (bombas[linha][coluna]) {
+		fim()
+		celula.innerText = "💥"
+		celula.className = "explodiu"
+		return mensagem.innerText = "Que pena! Não foi desta vez!"
+	} else if (!numeros[linha][coluna]) {
+		expandir(celula, linha, coluna)
+	} else {
+		abrir(celula, linha, coluna)
+	}
+
+	if (livres == 0) {
+		vitoria = 1
+		fim()
+		return mensagem.innerText = "Você venceu!"
 	}
 }
 
 function bandeira(celula)
 {
-
+	if (celula.innerText != "🚩") {
+		celula.innerText = "🚩"
+		celula.removeAttribute("onclick")
+	} else {
+		celula.innerText = ""
+		definir(celula)
+	}
 }
 
 function iniciar()
 {
+	vitoria = 0
+
 	const antigo = document.getElementById("campo")
-
 	antigo.getElementsByTagName("tbody")[0].remove()
-
 	antigo.appendChild(document.createElement("tbody"))
+
+	mensagem = document.getElementById("mensagem")
+	mensagem.innerText = ""
 
 	linhas = document.getElementById("linhas").value
 	colunas = document.getElementById("colunas").value

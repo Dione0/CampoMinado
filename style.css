@@ -4,7 +4,8 @@
 }
 
 body > table {
-	margin: auto
+	margin: auto;
+	text-align: center
 }
 
 body > table table {
@@ -40,4 +41,14 @@ input {
 .fechado {
 	cursor: pointer;
 	box-shadow: -4px -4px inset #bfbfbf, 4px 4px inset #eaeaea
+}
+
+.explodiu {
+	background-color: #ff9c9c;
+	box-shadow: -4px -4px inset #ffc1c1, 4px 4px inset #ff4f4f
+}
+
+.vitoria {
+	background-color: #e0ffca;
+	box-shadow: -4px -4px inset #dbf0cb, 4px 4px inset #c2dbb0
 }
