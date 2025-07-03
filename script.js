@@ -28,10 +28,18 @@ function redefinir(celula)
 
 function abrir(celula, linha, coluna)
 {
+	let cor
+
 	if (celula.className == "fechado")
 		livres--
+
 	celula.className = "aberto"
 	celula.innerText = numeros[linha][coluna]
+
+	for (let i = 0; i < numeros[linha][coluna]; i++) {
+		celula.style.color = `hsl(${255 - i * 127}, 100%, 30%)`
+	}
+
 	redefinir(celula)
 }
 
