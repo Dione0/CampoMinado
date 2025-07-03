@@ -6,6 +6,9 @@ var campo
 var bombas
 var numeros
 
+var temporizador
+var total
+var tempo = 0
 var livres
 var vitoria = 0
 var mensagem
@@ -96,6 +99,8 @@ function espalhar(linhas, colunas, dificuldade)
 	}
 
 	quantas = Math.round(linhas * colunas * porcentagem)
+
+	total = quantas
 
 	livres = linhas * colunas - quantas
 
@@ -302,6 +307,7 @@ function verificar(celula)
 		fim()
 		celula.innerText = "💥"
 		celula.className = "explodiu"
+		clearInterval(temporizador)
 		return mensagem.innerText = "Que pena! Não foi desta vez!"
 	} else if (!numeros[linha][coluna]) {
 		expandir(celula, linha, coluna)
@@ -312,6 +318,7 @@ function verificar(celula)
 	if (livres == 0) {
 		vitoria = 1
 		fim()
+		clearInterval(temporizador)
 		return mensagem.innerText = "Você venceu!"
 	}
 }
@@ -319,16 +326,24 @@ function verificar(celula)
 function bandeira(celula)
 {
 	if (celula.innerText != "🚩") {
+		total--
 		celula.innerText = "🚩"
 		celula.removeAttribute("onclick")
+		escrever(total, tempo)
 	} else {
+		total++
 		celula.innerText = ""
 		definir(celula)
+		escrever(total, tempo)
 	}
 }
 
 function iniciar()
 {
+	clearInterval(temporizador)
+	tempo = 0
+	iniciarTemporizador()
+
 	vitoria = 0
 
 	const antigo = document.getElementById("campo")
@@ -345,8 +360,24 @@ function iniciar()
 	campo = criar(linhas, colunas)
 	bombas = espalhar(linhas, colunas, dificuldade)
 	numeros = contagem(campo, bombas, linhas, colunas)
+
+	escrever(total, tempo)
+}
+
+function escrever(total, tempo)
+{
+	estatisticas.innerText = `💣: ${total} ⏱️: ${tempo}`
+}
+
+function iniciarTemporizador()
+{
+	temporizador = setInterval(() => {
+		tempo++
+		escrever(total, tempo)
+	}, 1000);
 }
 
 onload = () => {
 	iniciar()
+	escrever(total, tempo)
 }
