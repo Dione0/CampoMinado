@@ -296,12 +296,22 @@ function fim()
 
 function verificar(celula)
 {
-	let contagem = 0
-
 	const pos = celula.id.split("_")
 
 	const linha = Number(pos[0])
 	const coluna = Number(pos[1])
+
+	if (inicio) {
+		let i = 0;
+		while (bombas[linha][coluna] || numeros[linha][coluna]) {
+			bombas = espalhar(linhas, colunas, dificuldade)
+			numeros = contagem(campo, bombas, linhas, colunas)
+			i++
+			if (i > 1000)
+				break
+		}
+		inicio = 0
+	}
 
 	if (bombas[linha][coluna]) {
 		fim()
@@ -340,6 +350,7 @@ function bandeira(celula)
 
 function iniciar()
 {
+	inicio = 1
 	clearInterval(temporizador)
 	tempo = 0
 	iniciarTemporizador()
